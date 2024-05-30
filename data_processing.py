@@ -8,11 +8,15 @@ class Processing:
     def __init__(self, config, prompt, path, save_path) -> None:
         self.path = path
         self.save_path = save_path
+        self.save_csv_path = os.path.join(save_path, 'summary.csv')
+        self.save_txt_path = os.path.join(save_path, 'summary.txt')
 
         self.config = config
         self.prompt = prompt
         # self.message = message
         self.data = self._read_csv()
+
+        # self.save_flag
         # self.data = data
         # self.data_list = [data for i in range(len(self.data)/)]
 
@@ -20,20 +24,28 @@ class Processing:
     
     def run(self, n=1):
         self.result = []
+        num = 0
+        if os.path.exists(self.save_txt_path):
+            with open(self.save_txt_path, 'r') as f:
+                num = len(list(f.readlines()))
+            data_ = self.data[num:]
+        else:
+            data_ = self.data
         # while i < len(self.data):
         #     message = self.data[i:i + n]
         #     i += n
         #     input_message = ''
         #     for mess in message:
         #         input_message += '{} '.format(mess)
-        for i, input_message in enumerate(self.data):
-            print('original:',input_message)
+        for i, input_message in enumerate(data_):
+            print('num:{},original:{}'.format(i + num, input_message))
             res = self.gpt.run(input_message, self.prompt)
             print('summary:{}\n'.format(res))
-            self.result.append([input_message, res])
-            # if i % (1*n) == 0:
-            self._save_csv()
-            if i %2000 == 0:
+            save_text = '{}__{}__{}'.format(i + num, input_message, res)
+            # self.result=[input_message, res]
+            self._save_text(save_text)
+            # self._save_csv()
+            if i %2000 == 0 and i > 1:
                 time.sleep(2*60*60)
 
     def _read_csv(self):
@@ -43,7 +55,11 @@ class Processing:
 
     def _save_csv(self):
         df = pd.DataFrame(self.result)
-        df.to_csv(self.save_path, mode='w')
+        df.to_csv(self.save_path, mode='a')
+
+    def _save_text(self, message):
+        with open(os.path.join(self.save_txt_path), 'a') as f:
+            f.write('{}\n'.format(message))
 
 
 if __name__ == "__main__":
@@ -73,7 +89,7 @@ if __name__ == "__main__":
     # message = '患者因急性上呼吸道感染、肺炎住院治疗，2023.6.12日护士遵医嘱为患者采集动脉血标本，使用该产品，打开包装后发现其针栓处断开，立即更换。未对患者造成不良影响。 2023.5.26 14时护士给予病人抽取胰岛素时，发现针头弯曲，立即给与更换新注射器，检查无误后完成此次操作，未对患者造成二次伤害。2023.06.08 患者行肝门胆管癌手术，术中监测体温，显示未连接传感器，体温测不出，重新更换新体温探头，完成体温监测，未对患者造成伤害。2023.6.5 17：36护士遵医嘱给予患者心电监护，取用心电极片时，发现一个电极扣松动，立即给予更换新电极片，检查无误后完成此次操作，未对患者造成二次伤害患者因膝关节骨性关节炎入院行手术治疗，2023-6-29日8:00分主管医生准备为患者进行刀口换药，打开一次性使用换药包，发现包内碘伏棉球包装渗漏且污染其它用物，无法使用，立即更换新的换药包，未对患者造成不良后果。患者因膝关节骨性关节炎入院行手术治疗，2023-6-28日10:00分护士准备使用静脉留置针为患者进行穿刺输液，打开后发现留置针中间断裂，无法继续使用，立即更换新的留置针，未对患者造成不良后果。2023.05.17 护士取用时发现棉签包装未封口，立即更换新棉签，检查无误，未对患者造成伤害。'
     # message = '患者因急性上呼吸道感染、肺炎住院治疗，2023.6.12日护士遵医嘱为患者采集动脉血标本，使用该产品，打开包装后发现其针栓处断开，立即更换。未对患者造成不良影响。'
     path = './data/data.csv'
-    save_path = './data/summary.csv'
+    save_path = './data'
 
     # df = pd.read_csv(path)
     # data_all = list(df.loc[:,'0'])
@@ -84,5 +100,6 @@ if __name__ == "__main__":
     #     else:
     #         data = data_all[i*2000:(i+1)*2000]
     #     # print(data)
+    Processing(config_gpt, prompt, path, save_path).run(n=1)
     Processing(config_gpt4, prompt, path, save_path).run(n=1)
         # time.sleep(2*60*60)

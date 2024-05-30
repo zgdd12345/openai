@@ -1,4 +1,5 @@
 import openai
+from retrying import retry
 
 
 class GeneralApi:
@@ -13,6 +14,7 @@ class GeneralApi:
     def run(self, message, prompt):
         return self.ask(message, prompt)
 
+    @retry  # HTTP error
     def ask(self, message, prompt):
 
         messages_list=[{"role": "system", "content": message},
