@@ -48,7 +48,7 @@ class Processing:
 
 if __name__ == "__main__":
     # key = 'sk-D28MPhpzU4CY0HpYDb4f1a95E6564fC2Ac9a23D7551c99D7'
-
+    # key_gpt4 = 'sk-bqJtCvo4vEWDxp2UD3F249377e694cCa9e5b89244963E305'
     config_kimi = {
         'platform':'kimi',
         'key':'sk-kbu7EmPCaRi0xJnH5NJRR0lLfE03cf2BwBBenHysWyMSY0we',
