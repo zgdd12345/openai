@@ -44,7 +44,6 @@ class Processing:
             save_text = '{}__{}__{}'.format(i + num, input_message, res)
             # self.result=[input_message, res]
             self._save_text(save_text)
-            # if i % (1*n) == 0:
             # self._save_csv()
             if i %2000 == 0 and i > 1:
                 time.sleep(2*60*60)
