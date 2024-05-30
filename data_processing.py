@@ -91,15 +91,4 @@ if __name__ == "__main__":
     path = './data/data.csv'
     save_path = './data'
 
-    # df = pd.read_csv(path)
-    # data_all = list(df.loc[:,'0'])
-    # print(len(data_all))
-    # for i in range(10):
-    #     if (i+1)*2000 > len(data_all):
-    #         data = data_all[i*2000:]
-    #     else:
-    #         data = data_all[i*2000:(i+1)*2000]
-    #     # print(data)
-    Processing(config_gpt, prompt, path, save_path).run(n=1)
     Processing(config_gpt4, prompt, path, save_path).run(n=1)
-        # time.sleep(2*60*60)
