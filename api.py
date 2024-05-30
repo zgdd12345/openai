@@ -3,7 +3,7 @@ from retrying import retry
 
 
 class GeneralApi:
-    def __init__(self, config, model = 'gpt-3.5-turbo') -> None:
+    def __init__(self, config) -> None:
         self.key = config['key']
         self.platform = config['platform']
         self.model = config['model']
@@ -27,13 +27,13 @@ class GeneralApi:
             temperature = 0,
             max_token = 1024,
             )
-        return result['choices'][0]['message']['content']
+        return result['choices'][0]['message']['content'].strip()
 
 
 if __name__ == "__main__":
     # key = 'sk-proj-T12yf0xMw9PNWhwMcFbHT3BlbkFJEAs7lGsVlPVjZvq4XQgO'
     # key_l = 'sk-Xn2FJsrA8QTBUXU68983FaF148214f7485C9191802716cA0'
-    # key_kwwai = 'sk-D28MPhpzU4CY0HpYDb4f1a95E6564fC2Ac9a23D7551c99D7'
+    key_kwwai = 'sk-D28MPhpzU4CY0HpYDb4f1a95E6564fC2Ac9a23D7551c99D7'
 
     message = "You are GPT-4, answer my questions as if you were an expert in the field."
     prompt = "Write a blog on how to use GPT-4 with python in a jupyter notebook"

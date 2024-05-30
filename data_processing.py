@@ -38,15 +38,17 @@ class Processing:
         #     for mess in message:
         #         input_message += '{} '.format(mess)
         for i, input_message in enumerate(data_):
+            input_message = input_message.replace(' ', '').replace('\n', '').replace('\r', '')
             print('num:{},original:{}'.format(i + num, input_message))
             res = self.gpt.run(input_message, self.prompt)
+            res = res.replace(' ', '').replace('\n', '').replace('\r', '') # remove space, \n, and \r
             print('summary:{}\n'.format(res))
             save_text = '{}__{}__{}'.format(i + num, input_message, res)
             # self.result=[input_message, res]
             self._save_text(save_text)
             # self._save_csv()
-            if i %2000 == 0 and i > 1:
-                time.sleep(2*60*60)
+            # if i %2000 == 0 and i > 1:
+            #     time.sleep(2*60*60)
 
     def _read_csv(self):
         df = pd.read_csv(self.path)
@@ -100,6 +102,6 @@ if __name__ == "__main__":
     #     else:
     #         data = data_all[i*2000:(i+1)*2000]
     #     # print(data)
-    Processing(config_gpt, prompt, path, save_path).run(n=1)
-    Processing(config_gpt4, prompt, path, save_path).run(n=1)
+    # Processing(config_gpt, prompt, path, save_path).run(n=1)
+    Processing(config_gpt3, prompt, path, save_path).run(n=1)
         # time.sleep(2*60*60)
